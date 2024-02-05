@@ -3,10 +3,7 @@ from tensorflow import keras
 
 from preprocessing import load_name_dataset, explode_names
 from model import create_model
-
-
-SEED = 1907
-LABELS = {0: 'F', 1: 'M'}
+from config import SEED, MODEL_DIR
 
 
 def train_test_split(complete_names):
@@ -83,7 +80,7 @@ if __name__ == '__main__':
     )
 
     # Save model and encoder
-    model.save("model/PT-Name2Gender.keras")
+    model.save(MODEL_DIR / "PT-Name2Gender.keras")
 
-    with open("model/Name-Encoder.json", "w") as f:
+    with open(MODEL_DIR / "Name-Encoder.json", "w") as f:
         f.write(encoder.to_json())
