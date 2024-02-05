@@ -20,11 +20,12 @@ def name_to_gender_pipeline(name, name2gender, encoder, names):
 
 
 if __name__ == "__main__":
-    name2gender = keras.models.load_model("model/PT-Name2Gender.h5")
+    name2gender = keras.models.load_model("model/PT-Name2Gender.keras")
     encoder = keras.preprocessing.text.tokenizer_from_json(open("model/Name-Encoder.json").read())
     names_dict = json.load(open("data/names.json"))
 
-    names = ["João", "Maria", "Pedro", "Ana"]
+    # "Devandra" is not in the dataset and should be classified as F
+    names = ["João", "Maria", "Pedro", "Devandra"]
 
     for name in names:
         gender = name_to_gender_pipeline(name, name2gender, encoder, names_dict)

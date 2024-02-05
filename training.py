@@ -83,7 +83,7 @@ if __name__ == '__main__':
     )
 
     # Save model and encoder
-    model.save("model/PT-Name2Gender.h5")
+    model.save("model/PT-Name2Gender.keras")
 
     with open("model/Name-Encoder.json", "w") as f:
         f.write(encoder.to_json())

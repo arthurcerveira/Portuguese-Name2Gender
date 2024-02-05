@@ -21,11 +21,17 @@ def explode_names(complete_names):
         complete_names
             .explode('all_names', ignore_index=True)
             .replace('', pd.NA)
-            .dropna(subset=['all_names'])[["all_names", "classification"]]
+            .dropna(subset=['all_names'])[["all_names", "classification", "frequency_total"]]
     )
 
     unique_complete_names["all_names_norm"] = unique_complete_names["all_names"].apply(remove_accents)
-    unique_complete_names = unique_complete_names.drop_duplicates(subset=['all_names_norm'])
+
+    # Sort by frequency to keep the most common name gender
+    unique_complete_names = (
+        unique_complete_names
+            .sort_values(by="frequency_total", ascending=False)
+            .drop_duplicates(subset=['all_names_norm'])
+    )
 
     return unique_complete_names
 
