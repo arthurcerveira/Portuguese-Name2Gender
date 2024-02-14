@@ -39,12 +39,3 @@ def load_resources():
     names_dict = json.load(open(names_path))
 
     return name2gender, encoder, names_dict
-
-
-if __name__ == "__main__":
-    # "Devandra" is not in the dataset and should be classified as F
-    names = ["João", "Maria", "Pedro", "Devandra"]
-
-    for name in names:
-        gender = name_to_gender_pipeline(name)
-        print(name, gender)
