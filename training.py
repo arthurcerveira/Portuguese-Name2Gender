@@ -1,9 +1,12 @@
+from config import SEED, MODEL_DIR
+
 from sklearn import model_selection
+from sklearn.metrics import classification_report
 from tensorflow import keras
+import numpy as np
 
 from preprocessing import load_name_dataset, explode_names
 from model import create_model
-from config import SEED, MODEL_DIR
 
 
 def train_test_split(complete_names):
@@ -41,13 +44,28 @@ def tokenize_names(encoder, X_train, X_val):
     return padded_X_train, padded_X_val
 
 
+def test_model(model, X_test, y_test):
+    tokenized_X_test = encoder.texts_to_sequences(X_test)
+    max_length = max(map(len, tokenized_X_test))
+
+    padded_X_test = keras.preprocessing.sequence.pad_sequences(
+        tokenized_X_test, maxlen=max_length
+    )
+
+    y_pred = model.predict(padded_X_test, verbose=0)
+    y_pred = np.argmax(y_pred, axis=1)
+
+    report = classification_report(y_test, y_pred, target_names=["F", "M"])
+    return report
+
+
 if __name__ == '__main__':
     names = load_name_dataset()
     complete_names = explode_names(names)
 
     data_split = train_test_split(complete_names)
 
-    X_train, y_train, X_val, y_val, *_ = data_split
+    X_train, y_train, X_val, y_val, X_test, y_test = data_split
 
     # Tokenize names at character level
     encoder = keras.preprocessing.text.Tokenizer(
@@ -78,6 +96,11 @@ if __name__ == '__main__':
         batch_size=128, 
         validation_data=(tokenized_X_val, y_val)
     )
+
+    print("Training finished. Evaluating model...")
+    report = test_model(model, X_test, y_test)
+
+    print(report)
 
     # Save model and encoder
     model.save(MODEL_DIR / "PT-Name2Gender.keras")

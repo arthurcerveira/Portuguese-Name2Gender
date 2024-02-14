@@ -1,10 +1,11 @@
+from config import MODEL_DIR, DATA_DIR
+
 import json
 
 from tensorflow import keras
 import numpy as np
 
 from preprocessing import remove_accents
-from config import MODEL_DIR, DATA_DIR
 
 
 def name_to_gender_pipeline(name, name2gender=None, encoder=None, names=None):

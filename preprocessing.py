@@ -1,6 +1,7 @@
+from config import SEED, DATA_DIR
+
 from unicodedata import normalize, category
 import pandas as pd
-from config import SEED, DATA_DIR
 
 
 def remove_accents(string):
