@@ -1,11 +1,11 @@
-from config import MODEL_DIR, DATA_DIR
+from .config import MODEL_DIR, DATA_DIR
 
 import json
 
 from tensorflow import keras
 import numpy as np
 
-from preprocessing import remove_accents
+from .preprocessing import remove_accents
 
 
 def name_to_gender_pipeline(name, name2gender=None, encoder=None, names=None):
@@ -48,4 +48,3 @@ if __name__ == "__main__":
     for name in names:
         gender = name_to_gender_pipeline(name)
         print(name, gender)
-    
