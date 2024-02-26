@@ -1,12 +1,12 @@
-from config import SEED, MODEL_DIR
+from pt_name2gender.config import SEED, MODEL_DIR
+from pt_name2gender.preprocessing import load_name_dataset, explode_names
+from pt_name2gender.model import create_model
 
 from sklearn import model_selection
 from sklearn.metrics import classification_report
 from tensorflow import keras
 import numpy as np
-
-from preprocessing import load_name_dataset, explode_names
-from model import create_model
+import pandas as pd
 
 
 def train_test_split(complete_names):
@@ -17,9 +17,9 @@ def train_test_split(complete_names):
     X_val = val["all_names_norm"]
     X_test = test["all_names_norm"]
 
-    y_train = train["classification"].replace({"M": 1, "F": 0})
-    y_val = val["classification"].replace({"M": 1, "F": 0})
-    y_test = test["classification"].replace({"M": 1, "F": 0})
+    y_train = train["classification"].replace({"M": 1, "F": 0}).astype(int)
+    y_val = val["classification"].replace({"M": 1, "F": 0}).astype(int)
+    y_test = test["classification"].replace({"M": 1, "F": 0}).astype(int)
 
     return (
         X_train, y_train,
@@ -60,6 +60,9 @@ def test_model(model, X_test, y_test):
 
 
 if __name__ == '__main__':
+    # Suppress warning in replace method
+    pd.set_option('future.no_silent_downcasting', True)
+
     names = load_name_dataset()
     complete_names = explode_names(names)
 

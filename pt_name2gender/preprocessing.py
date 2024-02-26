@@ -1,4 +1,4 @@
-from .config import SEED, DATA_DIR
+from pt_name2gender.config import SEED, DATA_DIR
 
 from unicodedata import normalize, category
 import pandas as pd

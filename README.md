@@ -21,13 +21,15 @@ $ pip install git+https://github.com/arthurcerveira/Portuguese-Name2Gender.git
 Após instalar as dependências, é possível utilizar o modelo de acordo com o exemplo abaixo (disponível no arquivo `example.py`):
 
 ```python
-from pt_name2gender import name_to_gender_pipeline
+from pt_name2gender import Name2Gender
 
 # "Adrevaldo" and "Devandra" are not in the dataset and should be classified as M and F, respectively
 names = ["João", "Maria", "Adrevaldo", "Devandra"]
 
+name2gender = Name2Gender()
+
 for name in names:
-    gender = name_to_gender_pipeline(name)
+    gender = name2gender.pipeline(name)
     print(name, gender)
 ```
 

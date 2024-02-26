@@ -1,41 +1,43 @@
-from .config import MODEL_DIR, DATA_DIR
+from pt_name2gender.config import MODEL_DIR, DATA_DIR
+from pt_name2gender.preprocessing import remove_accents
 
 import json
+from dataclasses import dataclass
 
 from tensorflow import keras
 import numpy as np
 
-from .preprocessing import remove_accents
 
+@dataclass
+class Name2Gender:
+    model_path: str = MODEL_DIR / "PT-Name2Gender.keras"
+    encoder_path: str = MODEL_DIR / "Name-Encoder.json"
+    names_path: str = DATA_DIR / "names.json"
 
-def name_to_gender_pipeline(name, name2gender=None, encoder=None, names=None):
-    model, tokenizer, names_dict = load_resources()
+    def __post_init__(self):
+        self.model, self.encoder, self.names = self._load_resources()
 
-    # If not provided, use the loaded resources
-    name2gender = model if name2gender is None else name2gender
-    encoder = tokenizer if encoder is None else encoder
-    names = names_dict if names is None else names
+    def pipeline(self, name):
+        name = remove_accents(name)
 
-    name = remove_accents(name)
+        if name in self.names:
+            return self.names[name]
 
-    if name in names:
-        return names[name]
+        gender = self._predict(name)
 
-    tokenized_name = encoder.texts_to_sequences([name])
+        return 'M' if gender == 1 else 'F'
 
-    pred = name2gender.predict(tokenized_name, verbose=0)
-    gender = np.argmax(pred, axis=1)[0]
+    def _predict(self, name):
+        tokenized_name = self.encoder.texts_to_sequences([name])
 
-    return 'M' if gender == 1 else 'F'
+        pred = self.model.predict(tokenized_name, verbose=0)
+        gender = np.argmax(pred, axis=1)[0]
 
+        return gender
 
-def load_resources():
-    model_path = MODEL_DIR / "PT-Name2Gender.keras"
-    encoder_path = MODEL_DIR / "Name-Encoder.json"
-    names_path = DATA_DIR / "names.json"
+    def _load_resources(self):
+        name2gender = keras.models.load_model(self.model_path)
+        encoder = keras.preprocessing.text.tokenizer_from_json(open(self.encoder_path).read())
+        names_dict = json.load(open(self.names_path))
 
-    name2gender = keras.models.load_model(model_path)
-    encoder = keras.preprocessing.text.tokenizer_from_json(open(encoder_path).read())
-    names_dict = json.load(open(names_path))
-
-    return name2gender, encoder, names_dict
+        return name2gender, encoder, names_dict
