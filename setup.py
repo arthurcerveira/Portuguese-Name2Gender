@@ -8,7 +8,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='portugese-name2gender',
-    version='0.0.1',
+    version='0.1.0',
     description='Predict the gender of any PT-BR name',
     long_description=long_description,
     url='https://github.com/arthurcerveira/Portuguese-Name2Gender',

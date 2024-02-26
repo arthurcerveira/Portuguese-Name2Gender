@@ -10,6 +10,14 @@ import numpy as np
 
 @dataclass
 class Name2Gender:
+    """
+    Class to predict the gender of a name using a pre-trained LSTM model
+
+    args:
+        model_path: str = Path to the pre-trained Keras model
+        encoder_path: str = Path to the tokenizer in JSON format
+        names_path: str = Path to the names dataset in JSON format
+    """
     model_path: str = MODEL_DIR / "PT-Name2Gender.keras"
     encoder_path: str = MODEL_DIR / "Name-Encoder.json"
     names_path: str = DATA_DIR / "names.json"
@@ -17,7 +25,16 @@ class Name2Gender:
     def __post_init__(self):
         self.model, self.encoder, self.names = self._load_resources()
 
-    def pipeline(self, name):
+    def pipeline(self, name: str):
+        """
+        Pipeline to predict the gender of a PT-BR name
+        - Preprocess the name string
+        - If the name is in the dataset, return the gender
+        - If not, predict the gender using the pre-trained model
+
+        args:
+            name: str = Name to be predicted
+        """
         name = remove_accents(name)
 
         if name in self.names:

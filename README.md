@@ -1,6 +1,6 @@
 # Portuguese Name2Gender
 
-Treinamento e disponibilização de um modelo de rede neural LSTM para identificar o gênero a partir de um nome em português. O modelo foi treinado com um dataset de nomes em português e possui uma acurácia de >91%.
+Treinamento e disponibilização de um modelo de rede neural LSTM para identificar o gênero a partir de um nome em português. O modelo foi treinado com um dataset de nomes em português brasileiro e possui uma acurácia de >91%.
 
 ## Pipeline de classificação
 
@@ -56,3 +56,7 @@ O modelo foi treinado com um dataset de nomes em português e foi avaliado em um
    macro avg       0.91      0.91      0.91     10331
 weighted avg       0.92      0.92      0.92     10331
 ```
+
+## Fonte dos dados
+
+O dataset de classificação de gênero em nomes brasileiros foi obtido através da página [Brasil.IO](https://brasil.io/dataset/genero-nomes/nomes/).
